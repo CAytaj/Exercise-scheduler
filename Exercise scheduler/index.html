@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercise Scheduler</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+    .exercise-section {
+        display: flex;
+        flex-direction: row;
+    }
+    .left-column {
+        flex: 1;
+        padding-right: 20px;
+    }
+    .right-column {
+        flex: 3;
+    }
+    h1 {
+        text-align: center;
+    }
+    form {
+        margin-top: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="text"], input[type="time"], select, input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4caf50;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    #timer {
+        font-size: 24px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    video {
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Exercise Scheduler</h1>
+    <div class="exercise-section">
+        <div class="left-column">
+            <div id="timer">00:00</div>
+        </div>
+        <div class="right-column">
+            <form id="exerciseForm">
+                <label for="exerciseOption">Select Exercise:</label>
+                <select id="exerciseOption" required>
+                    <option value="">Select an exercise...</option>
+                    <option value="Yoga">Yoga</option>
+                    <option value="Squats">Squats</option>
+                    <option value="Pushups">Pushups</option>
+                    <option value="Yogasanas">Yogasanas</option>
+                    <option value="Jumps">Jumps</option>
+                    <option value="Pranayam">Pranayam</option>
+                    <option value="Suryanamaskar">Suryanamaskar</option>
+                </select>
+                <label for="timerDuration">Timer Duration (minutes):</label>
+                <input type="number" id="timerDuration" min="1" required>
+                <input type="submit" value="Schedule Exercise">
+            </form>
+            <div id="exerciseList"></div>
+        </div>
+    </div>
+    <video id="exerciseVideo" controls>
+        <source src="" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<script>
+    // Timer function
+    function startTimer(duration, display) {
+        let timer = duration * 60;
+        let minutes, seconds;
+        const intervalId = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                clearInterval(intervalId);
+                display.textContent = "00:00";
+            }
+        }, 1000);
+    }
+
+    // Form submission
+    document.getElementById('exerciseForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const exerciseOption = document.getElementById('exerciseOption').value;
+        const timerDuration = document.getElementById('timerDuration').value;
+        const exerciseItem = document.createElement('div');
+        exerciseItem.innerHTML = `
+            <p><strong>${exerciseOption}</strong></p>
+        `;
+        document.getElementById('exerciseList').appendChild(exerciseItem);
+        document.getElementById('exerciseForm').reset();
+
+        // Timer logic
+        let timerElement = document.createElement('div');
+        timerElement.textContent = 'Time Left: ' + timerDuration + ' minutes';
+        exerciseItem.appendChild(timerElement);
+
+        startTimer(timerDuration, timerElement);
+
+        // Load exercise video
+        const exerciseVideo = document.getElementById('exerciseVideo');
+        switch (exerciseOption) {
+            case 'Yoga':
+                exerciseVideo.src = 'yoagssanas.mp4'; // Example video file
+                break;
+            case 'Yogasanas':
+                exerciseVideo.src = '50 Yoga Poses with names _ Prachi Verma _ Yoga for all ages _ Yoga Asanas Beginner to Advanced.mp4'; // Example video file
+                break;
+            // Add cases for other exercises
+            case 'Squats':
+                exerciseVideo.src = 'squats.mp4'; // Example video file
+                break;
+
+                case 'Squats':
+                exerciseVideo.src = 'squats.mp4'; // Example video file
+                break;
+        }
+        exerciseVideo.load();
+    });
+</script>
+</body>
+</html>
